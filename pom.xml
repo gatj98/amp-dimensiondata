@@ -39,6 +39,9 @@
         <test.dimensiondata-cloudcontroller.endpoint>FIXME</test.dimensiondata-cloudcontroller.endpoint>
         <test.dimensiondata-cloudcontroller.identity>FIXME</test.dimensiondata-cloudcontroller.identity>
         <test.dimensiondata-cloudcontroller.credential>FIXME</test.dimensiondata-cloudcontroller.credential>
+        <test.dimensiondata-cloudcontroller.environment>
+            src/test/resources/environment/default-env.properties
+        </test.dimensiondata-cloudcontroller.environment>
         <jclouds.osgi.export>org.jclouds.dimensiondata*;version="${project.version}"</jclouds.osgi.export>
         <jclouds.osgi.import>
             org.jclouds.compute.internal;version="${project.version}",

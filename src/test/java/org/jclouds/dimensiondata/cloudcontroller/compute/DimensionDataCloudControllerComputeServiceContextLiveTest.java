@@ -43,6 +43,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jclouds.compute.predicates.NodePredicates.inGroup;
 import static org.jclouds.compute.predicates.NodePredicates.runningInGroup;
+import static org.jclouds.dimensiondata.cloudcontroller.TestEnvironmentProperties.envProperty;
 import static org.testng.Assert.assertNotNull;
 
 @Test(groups = "live", testName = "DimensionDataCloudControllerComputeServiceContextLiveTest")
@@ -88,8 +89,8 @@ public class DimensionDataCloudControllerComputeServiceContextLiveTest extends B
         final String name = "test";
 
         Template template = view.getComputeService().templateBuilder()
-                .osFamily(OsFamily.UBUNTU)
-                .locationId("NA9")
+                .osFamily(OsFamily.fromValue(envProperty("osType")))
+                .locationId(envProperty("datacenter"))
                 //.minRam(8192)
                 //.locationId("NA12")
                 .build();
@@ -98,8 +99,8 @@ public class DimensionDataCloudControllerComputeServiceContextLiveTest extends B
         options
                 .inboundPorts(22, 8080, 8081)
                 .runScript(AdminAccess.standard())
-                .networkDomainId("91f577d2-5812-4e39-a79f-a35e42eb78a6")
-                .vlanId("025c59d7-b7e5-4261-95b8-4af067233ee7");
+                .networkDomainId(envProperty("networkDomainId"))
+                .vlanId(envProperty("vlanId"));
 
         try {
             Set<? extends NodeMetadata> nodes = view.getComputeService().createNodesInGroup(name, NUM_NODES, template);
@@ -130,8 +131,7 @@ public class DimensionDataCloudControllerComputeServiceContextLiveTest extends B
         DimensionDataCloudControllerApi dimensionDataCloudControllerApi =
                       view.unwrapApi(DimensionDataCloudControllerApi.class);
         dimensionDataCloudControllerApi.getServerApi()
-              // server ID corresponds to "GJ_Test" server in devlab1
-              .reconfigureServer("4e00b8f7-28ea-4103-b757-0aa7f3a94e1e", 1, "STANDARD", 1);
+              .reconfigureServer(envProperty("existingServerId"), 1, "STANDARD", 1);
     }
 
     @Override

@@ -33,6 +33,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static org.jclouds.dimensiondata.cloudcontroller.TestEnvironmentProperties.envProperty;
 import static org.jclouds.dimensiondata.cloudcontroller.compute.strategy.GetOrCreateNetworkDomainThenCreateNodes.DEFAULT_PRIVATE_IPV4_BASE_ADDRESS;
 import static org.jclouds.dimensiondata.cloudcontroller.compute.strategy.GetOrCreateNetworkDomainThenCreateNodes.DEFAULT_PRIVATE_IPV4_PREFIX_SIZE;
 import static org.jclouds.dimensiondata.cloudcontroller.utils.DimensionDataCloudControllerUtils.generateFirewallRuleName;
@@ -40,8 +41,6 @@ import static org.testng.Assert.assertNotNull;
 
 @Test(groups = "live", testName = "NetworkApiLiveTest", singleThreaded = true)
 public class NetworkApiLiveTest extends BaseDimensionDataCloudControllerApiLiveTest {
-
-    private static final String DATACENTER = "NA9";
 
     private String networkDomainId;
     private String vlanId;
@@ -92,14 +91,14 @@ public class NetworkApiLiveTest extends BaseDimensionDataCloudControllerApiLiveT
     @Test
     public void testDeployNetworkDomain() {
         String networkDomainName = NetworkApiLiveTest.class.getSimpleName();
-        Response deployNetworkDomainResponse = api().deployNetworkDomain(DATACENTER, networkDomainName, NetworkApiLiveTest.class.getSimpleName(), "ESSENTIALS");
+        Response deployNetworkDomainResponse = api().deployNetworkDomain(envProperty("datacenter"), networkDomainName, NetworkApiLiveTest.class.getSimpleName(), "ESSENTIALS");
         networkDomainId = DimensionDataCloudControllerUtils.tryFindPropertyValue(deployNetworkDomainResponse, "networkDomainId");
         assertNotNull(networkDomainId);
     }
 
     @Test(expectedExceptions = ResourceAlreadyExistsException.class)
     public void testDeploySameNetworkDomain() {
-        api().deployNetworkDomain(DATACENTER, NetworkApiLiveTest.class.getSimpleName(), NetworkApiLiveTest.class.getSimpleName(), "ESSENTIALS");
+        api().deployNetworkDomain(envProperty("datacenter"), NetworkApiLiveTest.class.getSimpleName(), NetworkApiLiveTest.class.getSimpleName(), "ESSENTIALS");
     }
 
     @Test(dependsOnMethods = "testDeployVlan")

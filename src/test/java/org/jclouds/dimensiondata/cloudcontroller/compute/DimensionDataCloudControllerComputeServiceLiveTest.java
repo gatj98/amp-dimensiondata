@@ -16,6 +16,9 @@
  */
 package org.jclouds.dimensiondata.cloudcontroller.compute;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.domain.TemplateBuilder;
@@ -23,9 +26,7 @@ import org.jclouds.compute.internal.BaseComputeServiceLiveTest;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.Module;
+import static org.jclouds.dimensiondata.cloudcontroller.TestEnvironmentProperties.envProperty;
 
 /**
  * Live tests for the {@link org.jclouds.compute.ComputeService} integration.
@@ -60,6 +61,6 @@ public class DimensionDataCloudControllerComputeServiceLiveTest extends BaseComp
 
    @Override
    protected Template buildTemplate(TemplateBuilder templateBuilder) {
-      return super.buildTemplate(templateBuilder.locationId("NA9"));
+      return super.buildTemplate(templateBuilder.locationId(envProperty("datacenter")));
    }
 }

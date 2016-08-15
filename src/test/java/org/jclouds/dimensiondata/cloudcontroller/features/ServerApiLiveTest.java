@@ -16,24 +16,24 @@
  */
 package org.jclouds.dimensiondata.cloudcontroller.features;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
-
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import org.jclouds.dimensiondata.cloudcontroller.domain.Disk;
 import org.jclouds.dimensiondata.cloudcontroller.domain.NIC;
+import org.jclouds.dimensiondata.cloudcontroller.domain.NetworkInfo;
 import org.jclouds.dimensiondata.cloudcontroller.domain.Response;
 import org.jclouds.dimensiondata.cloudcontroller.domain.Server;
-import org.jclouds.dimensiondata.cloudcontroller.domain.NetworkInfo;
 import org.jclouds.dimensiondata.cloudcontroller.internal.BaseDimensionDataCloudControllerApiLiveTest;
 import org.jclouds.dimensiondata.cloudcontroller.utils.DimensionDataCloudControllerUtils;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import java.util.List;
+
+import static org.jclouds.dimensiondata.cloudcontroller.TestEnvironmentProperties.envProperty;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 @Test(groups = "live", testName = "ServerApiLiveTest", singleThreaded = true)
 public class ServerApiLiveTest extends BaseDimensionDataCloudControllerApiLiveTest {
@@ -53,9 +53,9 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControllerApiLiveTe
     public void testDeployAndStartServer() {
         Boolean started = Boolean.TRUE;
         NetworkInfo networkInfo = NetworkInfo.create(
-                "690de302-bb80-49c6-b401-8c02bbefb945",
+              envProperty("networkId"),
                 NIC.builder()
-                        .vlanId("6b25b02e-d3a2-4e69-8ca7-9bab605deebd")
+                        .vlanId(envProperty("vlanId"))
                         .build(),
                 Lists.<NIC> newArrayList()
         );
@@ -65,7 +65,13 @@ public class ServerApiLiveTest extends BaseDimensionDataCloudControllerApiLiveTe
                         .speed("STANDARD")
                         .build()
         );
-        Response response = api().deployServer(ServerApiLiveTest.class.getSimpleName(), "4c02126c-32fc-4b4c-9466-9824c1b5aa0f", started, networkInfo, disks, "P$$ssWwrrdGoDd!");
+        Response response = api().deployServer(
+              ServerApiLiveTest.class.getSimpleName(),
+              envProperty("existingImageId"),
+              started,
+              networkInfo,
+              disks,
+              "P$$ssWwrrdGoDd!");
         assertNotNull(response);
         serverId = DimensionDataCloudControllerUtils.tryFindPropertyValue(response, "serverId");
         assertNotNull(serverId);

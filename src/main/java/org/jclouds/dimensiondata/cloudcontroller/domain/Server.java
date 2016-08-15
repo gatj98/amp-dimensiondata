@@ -16,15 +16,14 @@
  */
 package org.jclouds.dimensiondata.cloudcontroller.domain;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.List;
-
+import com.google.auto.value.AutoValue;
+import com.google.common.base.CaseFormat;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.json.SerializedNames;
 
-import com.google.auto.value.AutoValue;
-import com.google.common.base.CaseFormat;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @AutoValue
 public abstract class Server {
@@ -70,8 +69,7 @@ public abstract class Server {
     public abstract List<Disk> disks();
     @Nullable public abstract NetworkInfo networkInfo();
     public abstract List<Object> softwareLabels();
-    @Nullable
-    public abstract VMwareTools vmwareTools();
+    @Nullable public abstract VMwareTools vmwareTools();
     @Nullable public abstract Progress progress();
     @Nullable public abstract VirtualHardware virtualHardware();
 

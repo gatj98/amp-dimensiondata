@@ -20,15 +20,16 @@ import org.jclouds.dimensiondata.cloudcontroller.domain.Status;
 import org.jclouds.dimensiondata.cloudcontroller.internal.BaseDimensionDataCloudControllerApiLiveTest;
 import org.testng.annotations.Test;
 
+import static org.jclouds.dimensiondata.cloudcontroller.TestEnvironmentProperties.envProperty;
 import static org.testng.Assert.assertNotNull;
 
 @Test(groups = "live", testName = "ServerCloneApiLiveTest", singleThreaded = true)
 public class ServerCloneApiLiveTest extends BaseDimensionDataCloudControllerApiLiveTest
 {
     @Test
-    public void testCloneServer()
+    public void testCloneServer() //TODO we need to tidy up afterwards - delete the new server
     {
-        Status status = api().clone("0896551e-4fe3-4450-a627-ad5548e7e83a", "trevor-test2", "trevor-description2");
+        Status status = api().clone(envProperty("existingServerId"), "trevor-test2", "trevor-description2");
         assertNotNull(status);
         if (null != status)
         {

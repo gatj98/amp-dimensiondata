@@ -16,14 +16,15 @@
  */
 package org.jclouds.dimensiondata.cloudcontroller.features;
 
-import static org.testng.Assert.assertNotNull;
-
-import java.util.List;
-
 import org.jclouds.dimensiondata.cloudcontroller.domain.Datacenter;
 import org.jclouds.dimensiondata.cloudcontroller.domain.OperatingSystem;
 import org.jclouds.dimensiondata.cloudcontroller.internal.BaseDimensionDataCloudControllerApiLiveTest;
 import org.testng.annotations.Test;
+
+import java.util.List;
+
+import static org.jclouds.dimensiondata.cloudcontroller.TestEnvironmentProperties.envProperty;
+import static org.testng.Assert.assertNotNull;
 
 @Test(groups = "live", testName = "InfrastructureApiLiveTest", singleThreaded = true)
 public class InfrastructureApiLiveTest extends BaseDimensionDataCloudControllerApiLiveTest {
@@ -39,7 +40,8 @@ public class InfrastructureApiLiveTest extends BaseDimensionDataCloudControllerA
 
     @Test
     public void testListOperatingSystems() {
-        List<OperatingSystem> operatingSystems = api().listOperatingSystems("NA9").concat().toList();
+        List<OperatingSystem> operatingSystems = api().listOperatingSystems(envProperty("datacenter")).concat()
+              .toList();
         assertNotNull(operatingSystems);
         for (OperatingSystem operatingSystem : operatingSystems) {
             assertNotNull(operatingSystem);
